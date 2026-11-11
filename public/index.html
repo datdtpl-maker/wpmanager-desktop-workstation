@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WP Profile Manager - Desktop Workspace</title>
+  <link rel="icon" type="image/x-icon" href="img/app.ico">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome 6 CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#0f172a'
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#f8fafc] text-slate-800 antialiased min-h-screen flex flex-col font-sans select-none overflow-hidden">
+
+  <div class="flex h-screen w-screen overflow-hidden">
+    <!-- SIDEBAR (Professional Modern Workspace) -->
+    <aside class="w-[270px] bg-[#0b1329] text-slate-300 flex flex-col flex-shrink-0 border-r border-slate-800/80 z-20">
+      <!-- App Brand -->
+      <div class="p-4 border-b border-white/5 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-sky-500 p-0.5 shadow-lg shadow-blue-500/25 flex items-center justify-center">
+            <div class="w-full h-full bg-[#0b1329] rounded-[10px] flex items-center justify-center p-1.5">
+              <img src="img/wordpress_logo.png" alt="WordPress" class="w-6 h-6 object-contain">
+            </div>
+          </div>
+          <div>
+            <div class="flex items-center gap-1.5">
+              <h1 class="font-extrabold text-white text-[15px] tracking-tight leading-none">WP Manager</h1>
+              <span class="text-[9px] font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30 px-1.5 py-0.5 rounded tracking-wider">PRO</span>
+            </div>
+            <p class="text-[11px] text-slate-400 mt-1 font-medium">Desktop Workstation</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Navigation & Views -->
+      <div class="flex-1 overflow-y-auto px-3 py-4 space-y-6">
+        <!-- Main Filter Views -->
+        <div>
+          <div class="text-[10px] font-bold text-slate-400/80 uppercase tracking-wider px-3 mb-2 flex items-center justify-between">
+            <span>Chế độ xem</span>
+            <span id="sidebarTotalBadge" class="bg-blue-600/80 text-white text-[10px] px-1.5 py-0.2 rounded-full font-mono">0</span>
+          </div>
+          <ul class="space-y-1">
+            <li>
+              <button onclick="selectStatusFilter('ALL')" id="filterAllBtn" class="nav-item-btn active w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-white">
+                <span class="flex items-center gap-2.5">
+                  <i class="fa-solid fa-layer-group text-sm"></i>
+                  <span>Tất cả profile</span>
+                </span>
+                <span id="allCountBadge" class="text-[11px] bg-black/25 px-2 py-0.5 rounded-md font-mono">0</span>
+              </button>
+            </li>
+            <li>
+              <button onclick="selectStatusFilter('RUNNING')" id="filterRunningBtn" class="nav-item-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white">
+                <span class="flex items-center gap-2.5">
+                  <span class="w-2 h-2 rounded-full bg-emerald-400 radar-pulse"></span>
+                  <span>Đang hoạt động</span>
+                </span>
+                <span id="runningCountBadge" class="text-[11px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded-md font-mono">0</span>
+              </button>
+            </li>
+            <li>
+              <button onclick="selectStatusFilter('READY')" id="filterReadyBtn" class="nav-item-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white">
+                <span class="flex items-center gap-2.5">
+                  <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                  <span>Sẵn sàng mở</span>
+                </span>
+                <span id="readyCountBadge" class="text-[11px] bg-slate-800 px-2 py-0.5 rounded-md font-mono text-slate-400">0</span>
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Groups List -->
+        <div>
+          <div class="text-[10px] font-bold text-slate-400/80 uppercase tracking-wider px-3 mb-2 flex items-center justify-between">
+            <span>Nhóm phân loại</span>
+            <button onclick="openAddProfileModal()" title="Thêm nhóm mới" class="text-[11px] text-blue-400 hover:text-blue-300 transition-colors">
+              <i class="fa-solid fa-plus"></i>
+            </button>
+          </div>
+          <ul class="space-y-1" id="groupListContainer">
+            <!-- Loaded dynamically -->
+          </ul>
+        </div>
+
+        <!-- System Architecture Pill Card -->
+        <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800/80 space-y-2 text-xs">
+          <div class="flex items-center gap-2 font-semibold text-slate-200">
+            <i class="fa-solid fa-circle-check text-emerald-400"></i>
+            <span>Chromium Vĩnh Viễn</span>
+          </div>
+          <p class="text-[11px] text-slate-400 leading-relaxed">
+            Mỗi profile lưu session, cookie & tài khoản độc lập tại <span class="font-mono text-slate-300">D:\Project Anti</span>, không bao giờ bị dính chùm.
+          </p>
+        </div>
+      </div>
+
+      <!-- Sidebar Bottom Action -->
+      <div class="p-3 border-t border-white/5 bg-[#070e1e] space-y-2">
+        <button onclick="openAddProfileModal()" class="btn-primary-shine w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold text-xs shadow-lg shadow-blue-600/30 transition-all">
+          <i class="fa-solid fa-plus text-xs"></i>
+          <span>Thêm profile mới</span>
+        </button>
+        <button onclick="openConfigModal()" class="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white text-xs font-medium transition-all border border-slate-700/50">
+          <i class="fa-solid fa-sliders text-xs"></i>
+          <span>Cài đặt hệ thống</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN WORKSPACE -->
+    <main class="flex-1 flex flex-col overflow-hidden bg-[#f8fafc]">
+      <!-- TOP HEADER -->
+      <header class="bg-white border-b border-slate-200/80 px-6 py-4 flex items-center justify-between shadow-xs z-10">
+        <div>
+          <div class="flex items-center gap-2 text-[11px] font-medium text-slate-400 mb-0.5">
+            <span>Workspace</span>
+            <i class="fa-solid fa-chevron-right text-[8px] text-slate-300"></i>
+            <span id="breadcrumbGroup" class="text-slate-600 font-semibold">Tất cả tài khoản</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <h2 id="currentViewTitle" class="text-xl font-bold text-slate-900 tracking-tight">Tất cả tài khoản WordPress</h2>
+            <span id="activeStatusPill" class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-semibold px-2.5 py-0.5 rounded-full flex items-center gap-1.5 shadow-xs">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 radar-pulse"></span>
+              <span id="activeCountText">Sẵn sàng làm việc</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2.5">
+          <button onclick="launchAllProfiles()" title="Mở đồng thời các profile" class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold border border-slate-200 transition-all shadow-xs">
+            <i class="fa-solid fa-bolt text-amber-500"></i>
+            <span>Mở tất cả</span>
+          </button>
+          <button onclick="closeAllProfiles()" title="Dừng toàn bộ profile đang mở" class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-rose-50 text-slate-700 hover:text-rose-600 text-xs font-semibold border border-slate-200 hover:border-rose-200 transition-all shadow-xs">
+            <i class="fa-solid fa-stop text-rose-500"></i>
+            <span>Dừng tất cả</span>
+          </button>
+          <div class="h-6 w-px bg-slate-200 mx-1"></div>
+          <button onclick="openAddProfileModal()" class="btn-primary-shine flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold text-xs shadow-md shadow-blue-500/25 transition-all">
+            <i class="fa-solid fa-user-plus text-xs"></i>
+            <span>+ Thêm profile</span>
+          </button>
+          <button onclick="fetchProfiles()" title="Làm mới danh sách" class="p-2 rounded-xl bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 transition-all shadow-xs">
+            <i class="fa-solid fa-rotate-right text-xs"></i>
+          </button>
+        </div>
+      </header>
+
+      <!-- METRIC CARDS (Elevated High-End Design) -->
+      <section class="px-6 py-4 grid grid-cols-4 gap-4">
+        <!-- Card 1 -->
+        <div class="card-glass rounded-2xl p-4 flex items-center justify-between relative overflow-hidden">
+          <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-indigo-500"></div>
+          <div>
+            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Tổng số profile</div>
+            <div class="text-2xl font-extrabold text-slate-900 mt-0.5" id="statTotalProfiles">0</div>
+            <div class="text-[11px] text-slate-500 mt-1 font-medium flex items-center gap-1">
+              <span class="text-blue-600 font-semibold">Tự do đổi tên</span> & phân loại
+            </div>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center text-xl shadow-xs">
+            <i class="fa-solid fa-users"></i>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="card-glass rounded-2xl p-4 flex items-center justify-between relative overflow-hidden">
+          <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 to-teal-500"></div>
+          <div>
+            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Đang hoạt động</div>
+            <div class="text-2xl font-extrabold text-emerald-600 mt-0.5" id="statRunningProfiles">0</div>
+            <div class="text-[11px] text-slate-500 mt-1 font-medium flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span>Phiên Chrome đang mở</span>
+            </div>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center text-xl shadow-xs">
+            <i class="fa-solid fa-circle-play"></i>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="card-glass rounded-2xl p-4 flex items-center justify-between relative overflow-hidden">
+          <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 to-purple-500"></div>
+          <div>
+            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Nhóm quản lý</div>
+            <div class="text-2xl font-extrabold text-slate-900 mt-0.5" id="statTotalGroups">0</div>
+            <div class="text-[11px] text-slate-500 mt-1 font-medium">
+              Danh mục phân chia
+            </div>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-xl shadow-xs">
+            <i class="fa-solid fa-folder-tree"></i>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="card-glass rounded-2xl p-4 flex items-center justify-between relative overflow-hidden">
+          <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 to-orange-500"></div>
+          <div>
+            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Tab tự mở / Profile</div>
+            <div class="text-2xl font-extrabold text-slate-900 mt-0.5">3 Website</div>
+            <div class="text-[11px] text-slate-500 mt-1 font-medium">
+              Tự điền link admin khác nhau
+            </div>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-amber-50 border border-amber-100 text-amber-600 flex items-center justify-center text-xl shadow-xs">
+            <i class="fa-brands fa-wordpress"></i>
+          </div>
+        </div>
+      </section>
+
+      <!-- TOOLBAR: SEARCH & FILTER -->
+      <section class="px-6 pb-3 flex items-center justify-between gap-4">
+        <!-- Search Input with Shortcut -->
+        <div class="relative flex-1 max-w-lg">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+          <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="Tìm kiếm profile theo tên, ID, ghi chú hoặc link website..."
+            class="w-full pl-9 pr-14 py-2 bg-white border border-slate-200/90 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-400 shadow-xs font-medium"
+            oninput="handleSearch()"
+          >
+          <span class="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-mono text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">Ctrl+K</span>
+        </div>
+
+        <!-- Filter Dropdowns -->
+        <div class="flex items-center gap-3">
+          <select id="groupFilterSelect" onchange="handleGroupFilterChange()" class="bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 shadow-xs">
+            <option value="ALL">📁 Tất cả các nhóm</option>
+          </select>
+          <span id="filteredCountText" class="text-xs font-semibold text-slate-500 bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200">Đang hiển thị 0 profile</span>
+        </div>
+      </section>
+
+      <!-- PROFILE TABLE (Modern High-Contrast Clean Table) -->
+      <section class="flex-1 overflow-y-auto px-6 pb-6">
+        <div class="card-glass rounded-2xl overflow-hidden flex flex-col min-h-[350px]">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="bg-slate-50/90 border-b border-slate-200/80 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                <th class="py-3.5 px-4 w-12 text-center whitespace-nowrap">STT</th>
+                <th class="py-3.5 px-4 min-w-[210px] whitespace-nowrap">Tên Profile & ID</th>
+                <th class="py-3.5 px-4 whitespace-nowrap min-w-[130px]">Nhóm</th>
+                <th class="py-3.5 px-4 min-w-[340px]">3 Đường Dẫn Admin WordPress</th>
+                <th class="py-3.5 px-4 min-w-[220px]">Ghi chú</th>
+                <th class="py-3.5 px-4 whitespace-nowrap w-32 text-center">Trạng thái</th>
+                <th class="py-3.5 px-4 text-right whitespace-nowrap w-48">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="profileTableBody" class="divide-y divide-slate-100">
+              <!-- Loaded via JavaScript -->
+            </tbody>
+          </table>
+
+          <!-- Empty State -->
+          <div id="emptyState" class="hidden flex-1 flex flex-col items-center justify-center p-12 text-center">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-blue-50 to-indigo-50 border border-blue-100 flex items-center justify-center text-blue-600 text-2xl mb-3 shadow-xs">
+              <i class="fa-solid fa-folder-open"></i>
+            </div>
+            <h3 class="font-bold text-slate-800 text-base">Chưa có profile nào phù hợp</h3>
+            <p class="text-xs text-slate-400 max-w-sm mt-1">Bấm nút "Thêm profile" để tự điền 3 link admin của bạn và lưu cookies cứng.</p>
+            <button onclick="openAddProfileModal()" class="btn-primary-shine mt-4 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-semibold rounded-xl shadow-md shadow-blue-500/25">
+              + Tạo profile đầu tiên
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- MODAL: ADD / EDIT PROFILE -->
+  <div id="profileModal" class="hidden fixed inset-0 z-50 modal-overlay bg-slate-900/60 backdrop-blur-sm">
+    <div class="modal-anim my-auto bg-white rounded-2xl shadow-2xl max-w-2xl w-full border border-slate-100 overflow-hidden flex flex-col max-h-[92vh]">
+      <!-- Modal Header (Sticky) -->
+      <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/90 flex-shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center text-base">
+            <i class="fa-solid fa-user-gear"></i>
+          </div>
+          <div>
+            <h3 id="modalTitle" class="font-bold text-slate-900 text-base tracking-tight">Thêm Profile Mới</h3>
+            <p class="text-xs text-slate-500">Thiết lập profile độc lập và 3 đường link trang quản trị admin</p>
+          </div>
+        </div>
+        <button onclick="closeProfileModal()" class="text-slate-400 hover:text-slate-600 w-8 h-8 rounded-lg flex items-center justify-center hover:bg-slate-100 transition-colors">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <!-- Modal Form (Scrollable body) -->
+      <form id="profileForm" onsubmit="handleSaveProfile(event)" class="modal-content-scroll p-6 space-y-4 text-xs flex-1">
+        <input type="hidden" id="formProfileId">
+
+        <!-- Name & Group -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block font-bold text-slate-700 uppercase tracking-wider text-[10px] mb-1.5">Tên Profile <span class="text-rose-500">*</span></label>
+            <input 
+              type="text" 
+              id="formProfileName" 
+              placeholder="Ví dụ: Quản trị Khải Hoàn 01" 
+              required 
+              class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-semibold text-slate-800 text-xs shadow-xs"
+            >
+            <p class="text-[10px] text-slate-400 mt-1">Đổi tên nhanh bằng cách nhấp đúp trên bảng.</p>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 uppercase tracking-wider text-[10px] mb-1.5">Nhóm / Danh mục</label>
+            <input 
+              type="text" 
+              id="formProfileGroup" 
+              placeholder="Khải Hoàn Web" 
+              list="groupDataList"
+              class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 font-medium text-slate-800 text-xs shadow-xs"
+            >
+            <datalist id="groupDataList"></datalist>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 uppercase tracking-wider text-[10px] mb-1.5">Ghi chú / Email tài khoản</label>
+          <input 
+            type="text" 
+            id="formProfileNote" 
+            placeholder="Ghi chú thêm về phân quyền, email hoặc tài khoản..." 
+            class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 font-medium text-slate-800 text-xs shadow-xs"
+          >
+        </div>
+
+        <!-- 3 ĐƯỜNG DẪN ADMIN RIÊNG BIỆT (GIAO DIỆN CHUYÊN NGHIỆP) -->
+        <div class="bg-gradient-to-br from-slate-50 to-blue-50/40 border border-blue-200/80 rounded-2xl p-4 space-y-3 shadow-xs">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-blue-600 text-white flex items-center justify-center text-xs">
+                <i class="fa-solid fa-link"></i>
+              </span>
+              <div>
+                <span class="font-bold text-slate-900 text-xs uppercase tracking-tight">3 Đường Dẫn Admin WordPress Khác Nhau</span>
+                <p class="text-[11px] text-slate-500">Mỗi profile tự do cấu hình 3 link đăng nhập admin riêng biệt:</p>
+              </div>
+            </div>
+            <button type="button" onclick="clearFormUrls()" class="text-[11px] font-medium text-slate-500 hover:text-blue-600 hover:underline">
+              Xóa rỗng
+            </button>
+          </div>
+
+          <div class="space-y-2.5">
+            <!-- Web 1 -->
+            <div class="bg-white rounded-xl p-2.5 border border-slate-200/90 shadow-2xs">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-[11px] font-bold text-blue-700 flex items-center gap-1.5">
+                  <span class="w-4 h-4 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-[10px] font-mono">1</span>
+                  <span>Website 1 (Admin URL 1):</span>
+                </span>
+                <span class="text-[10px] font-mono text-slate-400">Tab 1</span>
+              </div>
+              <input 
+                type="url" 
+                id="formUrl1" 
+                placeholder="Ví dụ: https://khaihoanskincare.com/wp-admin/" 
+                required
+                class="w-full px-3 py-1.5 bg-slate-50/70 border border-slate-200 rounded-lg text-xs font-mono text-slate-800 focus:outline-none focus:bg-white focus:border-blue-500"
+              >
+            </div>
+
+            <!-- Web 2 -->
+            <div class="bg-white rounded-xl p-2.5 border border-slate-200/90 shadow-2xs">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-[11px] font-bold text-indigo-700 flex items-center gap-1.5">
+                  <span class="w-4 h-4 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-[10px] font-mono">2</span>
+                  <span>Website 2 (Admin URL 2):</span>
+                </span>
+                <span class="text-[10px] font-mono text-slate-400">Tab 2</span>
+              </div>
+              <input 
+                type="url" 
+                id="formUrl2" 
+                placeholder="Ví dụ: https://khaihoanderma.com/wp-admin/" 
+                required
+                class="w-full px-3 py-1.5 bg-slate-50/70 border border-slate-200 rounded-lg text-xs font-mono text-slate-800 focus:outline-none focus:bg-white focus:border-indigo-500"
+              >
+            </div>
+
+            <!-- Web 3 -->
+            <div class="bg-white rounded-xl p-2.5 border border-slate-200/90 shadow-2xs">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-[11px] font-bold text-purple-700 flex items-center gap-1.5">
+                  <span class="w-4 h-4 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-[10px] font-mono">3</span>
+                  <span>Website 3 (Admin URL 3):</span>
+                </span>
+                <span class="text-[10px] font-mono text-slate-400">Tab 3</span>
+              </div>
+              <input 
+                type="url" 
+                id="formUrl3" 
+                placeholder="Ví dụ: https://khaihoanpharma.com/wp-admin/ (hoặc web bất kỳ)" 
+                required
+                class="w-full px-3 py-1.5 bg-slate-50/70 border border-slate-200 rounded-lg text-xs font-mono text-slate-800 focus:outline-none focus:bg-white focus:border-purple-500"
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer (Sticky inside form) -->
+        <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-3 sticky bottom-0 bg-white/95 py-2">
+          <button type="button" onclick="closeProfileModal()" class="px-4 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100 font-semibold transition-colors">Hủy bỏ</button>
+          <button type="submit" class="btn-primary-shine px-6 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold shadow-lg shadow-blue-500/25 flex items-center gap-2 transition-all">
+            <i class="fa-solid fa-floppy-disk text-xs"></i>
+            <span>LƯU PROFILE & 3 LINK ADMIN</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: QUICK EDIT 3 URLS -->
+  <div id="quickUrlModal" class="hidden fixed inset-0 z-50 modal-overlay bg-slate-900/60 backdrop-blur-sm">
+    <div class="modal-anim my-auto bg-white rounded-2xl shadow-2xl max-w-lg w-full border border-slate-100 overflow-hidden flex flex-col max-h-[92vh]">
+      <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/80 flex-shrink-0">
+        <div>
+          <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+            <i class="fa-solid fa-link text-blue-600"></i>
+            <span>Chỉnh Sửa Nhanh 3 Link Admin</span>
+          </h3>
+          <p id="quickUrlProfileName" class="text-[11px] text-slate-500 mt-0.5 font-medium"></p>
+        </div>
+        <button onclick="closeQuickUrlModal()" class="text-slate-400 hover:text-slate-600 w-8 h-8 rounded-lg flex items-center justify-center hover:bg-slate-100">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+      <form id="quickUrlForm" onsubmit="handleSaveQuickUrls(event)" class="modal-content-scroll p-5 space-y-3 text-xs flex-1">
+        <input type="hidden" id="quickUrlProfileId">
+        <div>
+          <label class="block font-bold text-blue-700 text-[11px] mb-1">Web 1 Admin:</label>
+          <input type="url" id="quickUrl1" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg font-mono text-xs focus:bg-white focus:border-blue-500">
+        </div>
+        <div>
+          <label class="block font-bold text-indigo-700 text-[11px] mb-1">Web 2 Admin:</label>
+          <input type="url" id="quickUrl2" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg font-mono text-xs focus:bg-white focus:border-indigo-500">
+        </div>
+        <div>
+          <label class="block font-bold text-purple-700 text-[11px] mb-1">Web 3 Admin:</label>
+          <input type="url" id="quickUrl3" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg font-mono text-xs focus:bg-white focus:border-purple-500">
+        </div>
+        <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-2.5">
+          <button type="button" onclick="closeQuickUrlModal()" class="px-4 py-2 rounded-xl text-slate-600 hover:bg-slate-100 font-semibold">Đóng</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold shadow-md shadow-blue-500/25">
+            Lưu 3 Link Admin
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: SETTINGS -->
+  <div id="configModal" class="hidden fixed inset-0 z-50 modal-overlay bg-slate-900/60 backdrop-blur-sm">
+    <div class="modal-anim my-auto bg-white rounded-2xl shadow-2xl max-w-lg w-full border border-slate-100 overflow-hidden flex flex-col max-h-[92vh]">
+      <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/80 flex-shrink-0">
+        <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+          <i class="fa-solid fa-sliders text-blue-600"></i>
+          <span>Cài Đặt Hệ Thống</span>
+        </h3>
+        <button onclick="closeConfigModal()" class="text-slate-400 hover:text-slate-600 w-8 h-8 rounded-lg flex items-center justify-center hover:bg-slate-100">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <form id="configForm" onsubmit="handleSaveConfig(event)" class="modal-content-scroll p-5 space-y-4 text-xs flex-1">
+        <div>
+          <label class="block font-bold text-slate-700 uppercase tracking-wider text-[10px] mb-1">Đường dẫn Chrome Executable</label>
+          <input 
+            type="text" 
+            id="cfgBrowserPath" 
+            class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono text-slate-800"
+            required
+          >
+          <p class="text-[10px] text-slate-400 mt-1">Mặc định: C:\Program Files\Google\Chrome\Application\chrome.exe</p>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 uppercase tracking-wider text-[10px] mb-1">3 Link Admin Gợi Ý Mặc Định (Tự động điền mẫu)</label>
+          <div class="space-y-2">
+            <input type="url" id="cfgUrl1" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-mono" placeholder="Link 1">
+            <input type="url" id="cfgUrl2" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-mono" placeholder="Link 2">
+            <input type="url" id="cfgUrl3" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-mono" placeholder="Link 3">
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-3 sticky bottom-0 bg-white/95 py-2">
+          <button type="button" onclick="closeConfigModal()" class="px-4 py-2 rounded-xl text-slate-600 hover:bg-slate-100 font-semibold">Đóng</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold shadow-md shadow-blue-500/25">
+            Lưu cài đặt
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-10 opacity-0 pointer-events-none transition-all duration-300 bg-slate-900 text-white text-xs px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 border border-slate-800">
+    <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
+    <span id="toastMsg" class="font-medium">Thành công</span>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

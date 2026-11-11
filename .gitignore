@@ -1,0 +1,26 @@
+# Environment & Local Data (Privacy Protection)
+data/profiles.json
+data/config.json
+profiles/
+app_data/
+*.log
+
+# PyInstaller & Build artifacts
+build/
+dist/
+*.spec
+app_bundle.zip
+
+# Python & Node
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+node_modules/
+package-lock.json
+
+# IDE & OS
+.vscode/
+.idea/
+Thumbs.db
+Desktop.ini

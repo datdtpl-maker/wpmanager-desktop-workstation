@@ -1,0 +1,15 @@
+{
+  "browserPath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+  "defaultUrls": [
+    "https://your-site1.com/wp-admin/",
+    "https://your-site2.com/wp-admin/",
+    "https://your-site3.com/wp-admin/"
+  ],
+  "defaultGroup": "Chung",
+  "groups": [
+    "Chung",
+    "Chi nhánh 1",
+    "Chi nhánh 2",
+    "Thử nghiệm"
+  ]
+}

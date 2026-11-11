@@ -1,0 +1,16 @@
+[
+  {
+    "id": "prof_example_01",
+    "name": "Profile Quản Trị Website 01",
+    "group": "Chung",
+    "note": "Quản trị viên 3 website mẫu",
+    "urls": [
+      "https://your-site1.com/wp-admin/",
+      "https://your-site2.com/wp-admin/",
+      "https://your-site3.com/wp-admin/"
+    ],
+    "proxy": "",
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "lastOpenedAt": null
+  }
+]
